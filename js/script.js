@@ -1,59 +1,55 @@
-//getRandomNumber per creare 5 numeri random 
-// printRandomNumber per stampare i 5 numeri nell'html
-// clearBody per nascondere i 5 numeri random 
-// set timer per attivare clearBody che parte quando si attiva printRandomNumber 
-// alla fine del timer userNumber chiede i 5 numeri 
-
-var numeriRandom = [];
-var numeriUtente = [];
-var numeriSbagliati = [];
-var numeroUtente;
-var punteggio = 0;
-
-
-while (numeriRandom.length < 5) {
-    var numeroCasuale = generaNumeriRandom(1, 9);
-    numeriRandom.push(numeroCasuale);
-}
-document.getElementById('numeri-random').innerHTML = numeriRandom
-
-const randomNumberTimeOut = setTimeout(myRandomNumbers, 2000);
-
-function myRandomNumbers() {
-    document.getElementById('numeri-random').innerHTML = '';
+const arrRandom = [];
+const eleOutput = document.getElementById('output');
+for (let i = 0; i < 5; i++) {
+    let randomNumber;
+    do {
+        randomNumber = getRandomBetween(1, 100)
+    } while (arrRandom.includes(randomNumber))
     
+    arrRandom.push(randomNumber)
 }
 
-const promptUtenteStart = setTimeout (promptNumeriUtente, 3000);
+console.log(arrRandom)
 
-function promptNumeriUtente(){
-while (numeriUtente.length < 5) {
-    numeroUtente = parseInt(prompt("Inserisci un numero da 0 a 9"));
-    numeriUtente.push(numeroUtente);
-}
-if (numeriRandom[1] == numeriUtente[1]) {
-    punteggio ++
+eleOutput.innerHTML = arrRandom;
+
+setTimeout(() => {
+    eleOutput.innerHTML = '';
+}, 3000);
+
+setTimeout (finishGame, 4000);
+
+function getRandomBetween(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
+function finishGame() {
+    const arrUserNumbers = [];
+    for(let i = 0; i< 5; i++) {
+        let userNumbers;
+        let message = 'numero'
+        do {
+            userNumbers = parseInt(prompt(message))
+            if (arrUserNumbers.includes(userNumbers)) {
+                message = 'diversi'
+            }
+        } while (arrUserNumbers.includes(userNumbers));
+
+        arrUserNumbers.push(userNumbers);
+        document.getElementById('usernum').innerHTML = 'numeri utente: ' + arrUserNumbers;
+    }
     
-} else {
-    numeriSbagliati.push(numeroUtente)
-}
-document.getElementById('numeri-random').innerHTML = numeriRandom
-document.getElementById('numeri-utente').innerHTML = 'numeri-utente' + numeriUtente
-document.getElementById('punteggio').innerHTML = 'punteggio' + punteggio
-document.getElementById('messaggio').innerHTML = 'num errati' + numeriSbagliati.length
+    let guessedNumbers = 0;
+    let arrGuessed = [];
+    for (let i = 0; i < 5; i++) {
+      if (arrRandom[i] == arrUserNumbers[i]) {
+          guessedNumbers++;
+          arrGuessed.push(arrUserNumbers[i]);
+      }
+    };
+    
+    eleOutput.innerHTML = 'numeri da acchiappare: ' + arrRandom;
+    document.getElementById('score').innerHTML = 'punteggio: ' + guessedNumbers;
+    document.getElementById('numeri').innerHTML = 'numeri acchiappati: ' + arrGuessed;
 
-console.log(numeriUtente)
-}
-  function generaNumeriRandom(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  
-
-
-
-
-
-
-
-
+};
